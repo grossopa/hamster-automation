@@ -1,0 +1,50 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.hamster</groupId>
+    <artifactId>hamster-automation</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>hamster-automation-react</artifactId>
+  <name>Hamster Automation React</name>
+
+  <properties>
+    <node.home>src/main/js</node.home>
+  </properties>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>${node.home}/build</directory>
+        <includes>
+          <include>**</include>
+        </includes>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>install</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <executable>npm</executable>
+          <workingDirectory>${node.home}</workingDirectory>
+          <arguments>
+            <argument>run</argument>
+            <argument>install</argument>
+          </arguments>
+        </configuration>
+      </plugin>
+      
+    </plugins>
+  </build>
+</project>
