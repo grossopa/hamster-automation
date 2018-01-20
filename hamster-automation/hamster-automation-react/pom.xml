@@ -8,7 +8,7 @@
   </parent>
   <artifactId>hamster-automation-react</artifactId>
   <name>Hamster Automation React</name>
-
+  
   <properties>
     <node.home>src/main/js</node.home>
   </properties>

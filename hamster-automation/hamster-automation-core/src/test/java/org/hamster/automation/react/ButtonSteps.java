@@ -1,9 +1,7 @@
-/**
- * 
- */
 package org.hamster.automation.react;
 
 import org.hamster.automation.react.base.ReactElement;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,6 +14,7 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.api.junit.Cucumber;
 
 /**
  *
@@ -23,6 +22,7 @@ import cucumber.api.java.en.When;
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
+@RunWith(Cucumber.class)
 public class ButtonSteps {
 
     private WebDriver driver;

@@ -1,15 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <groupId>org.hamster</groupId>
   <artifactId>hamster-automation</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <name>Hamster Automation Evaluation</name>
-
-  <parent>
-    <groupId>org.hamster</groupId>
-    <artifactId>hamster-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-  </parent>
+  <name>Hamster Web Automation Solution</name>
+  <packaging>pom</packaging>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,6 +14,13 @@
     <cucumber.version>1.2.5</cucumber.version>
     <junit.version>4.12</junit.version>
     <selenium-cucumber-java.version>1.0.0</selenium-cucumber-java.version>
+    <spring.version>4.3.13.RELEASE</spring.version>
+    <java.version>1.8</java.version>
+
+    <sonar.jacoco.reportPath>target/sonar-jacoco</sonar.jacoco.reportPath>
+    <jacoco-maven-plugin.version>0.8.0</jacoco-maven-plugin.version>
+    <maven-cobertura-plugin.version>1.4</maven-cobertura-plugin.version>
+    <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
   </properties>
 
   <dependencies>
@@ -53,12 +56,81 @@
       <version>${cucumber.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>info.cukes</groupId>
+      <artifactId>cucumber-spring</artifactId>
+      <version>${cucumber.version}</version>
+    </dependency>
+
     <!-- These are the junit dependencies -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
   </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <!-- code coverage -->
+        <plugin>
+          <groupId>maven-plugins</groupId>
+          <artifactId>maven-cobertura-plugin</artifactId>
+          <version>${maven-cobertura-plugin.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven-compiler-plugin.version}</version>
+          <configuration>
+            <source>${java.version}</source>
+            <target>${java.version}</target>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${jacoco-maven-plugin.version}</version>
+          <configuration>
+            <destFile>${sonar.jacoco.reportPath}</destFile>
+            <append>true</append>
+          </configuration>
+          <executions>
+            <!-- Prepares the property pointing to the JaCoCo runtime agent which is passed as VM argument when Maven the 
+              Surefire plugin is executed. -->
+            <execution>
+              <id>pre-unit-test</id>
+              <goals>
+                <goal>prepare-agent</goal>
+              </goals>
+            </execution>
+            <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run. -->
+            <execution>
+              <id>post-unit-test</id>
+              <phase>test</phase>
+              <goals>
+                <goal>report</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+  </build>
+
+  <modules>
+    <module>hamster-automation-core</module>
+    <module>hamster-automation-react</module>
+  </modules>
 
 </project>
