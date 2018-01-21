@@ -7,6 +7,6 @@ package org.hamster.automation.validation;
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
-public static enum RequiredLevel {
+public enum RequiredLevel {
     MANDATORY, WARNING, OPTIONAL
 }
