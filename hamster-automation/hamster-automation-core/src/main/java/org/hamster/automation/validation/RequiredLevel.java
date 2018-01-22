@@ -1,7 +1,7 @@
 package org.hamster.automation.validation;
 
 /**
- * Indicates whether it's required or not.
+ * Indicates whether a validation is required or not.
  *
  *
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>

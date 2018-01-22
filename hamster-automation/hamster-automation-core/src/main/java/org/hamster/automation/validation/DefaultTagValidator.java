@@ -12,7 +12,9 @@ import com.beust.jcommander.internal.Lists;
 import cucumber.api.Scenario;
 
 /**
- * validates all tags
+ * Contains following validation methods to ensure each scenario:<br>
+ * 1. Must have tag(s) to indicate the applicable environments<br>
+ * 2. Must have tag(s) to indicate a version number (since)<br>
  *
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
@@ -58,7 +60,6 @@ public class DefaultTagValidator implements TagValidator {
         List<TagValidation> result = Lists.newArrayList();
         result.add(environmentValidation());
         result.add(versionValidation());
-        result.add(typeValidation());
         return result;
     }
 
@@ -76,10 +77,4 @@ public class DefaultTagValidator implements TagValidator {
         return new RegexTagValidation("version", "([A-Za-z0-9]+-)?[0-9]+.[0-9]+(.[0-9]+)?", RequiredLevel.MANDATORY);
     }
 
-    /**
-     * optional for testing type
-     */
-    protected TagValidation typeValidation() {
-        return new RegexTagValidation("type", "feature|regression", RequiredLevel.OPTIONAL);
-    }
 }

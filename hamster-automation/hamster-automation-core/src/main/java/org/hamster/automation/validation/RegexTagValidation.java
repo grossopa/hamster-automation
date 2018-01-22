@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import com.google.common.base.Preconditions;
 
 /**
- *
+ * A common regex based tag validation.
  *
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
