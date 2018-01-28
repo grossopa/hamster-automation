@@ -16,7 +16,7 @@
 #""
 ## (Comments)
 #Sample Feature Definition Template
-@Component @React
+@LOCAL @JIRA-123 @1.0
 Feature: JIRA-1 React Component test
 
   Scenario: Material UI button hover

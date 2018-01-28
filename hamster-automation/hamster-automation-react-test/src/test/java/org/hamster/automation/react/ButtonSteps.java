@@ -1,16 +1,20 @@
 package org.hamster.automation.react;
 
-import org.hamster.automation.driver.DefaultDriverProvider;
-import org.hamster.automation.driver.DriverType;
 import org.hamster.automation.react.base.ReactElement;
+import org.hamster.automation.spring.AbstractTestSteps;
+import org.hamster.automation.spring.TestConfig;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import cucumber.api.java.After;
+import cucumber.api.Scenario;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -24,25 +28,27 @@ import cucumber.api.junit.Cucumber;
  * @since 1.0
  */
 @RunWith(Cucumber.class)
-public class ButtonSteps {
-
-    private WebDriver driver;
-
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
+public class ButtonSteps extends AbstractTestSteps {
+    
+    @Configuration
+    public static class AutomationTestConfig extends TestConfig {
+        
+    }
+    
     @Before
-    public void before() {
-        // System.setProperty("webdriver.chrome.driver", "D:\\automation\\chromedriver.exe");
-
-        driver = new DefaultDriverProvider("D:\\java\\hamster-automation\\chromedriver.exe").build(DriverType.CHROME);
-        driver.navigate().to("http://localhost:3000");
+    public void before(Scenario scenario) {
+        super.before(scenario);
     }
 
-    @After
-    public void after() {
-        driver.quit();
-    }
+    @Autowired
+    private RemoteWebDriver driver;
+
 
     @Given("^A React button with anchor \"([^\"]*)\"$")
     public void a_React_button_with_anchor(String id) throws Throwable {
+        driver.navigate().to("http://localhost:3000");
+        
         WebDriverWait wait = new WebDriverWait(driver, 10);
         WebElement element = wait
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath(ReactElement.getXpath(id))));

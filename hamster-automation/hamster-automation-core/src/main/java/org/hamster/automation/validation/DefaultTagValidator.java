@@ -5,6 +5,7 @@ package org.hamster.automation.validation;
 
 import static java.text.MessageFormat.format;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.beust.jcommander.internal.Lists;
@@ -29,6 +30,27 @@ public class DefaultTagValidator implements TagValidator {
     @Override
     public void validateTags(Scenario scenario) {
         List<TagValidation> validations = getTagValidations();
+        Collection<String> tagNames = scenario.getSourceTagNames();
+
+        // validate whether required tags are present
+        validations.forEach(v -> {
+            boolean[] exist = new boolean[1];
+            tagNames.forEach(t -> {
+                if (v.validate(t) == TagValidationResult.ACCEPTED) {
+                    exist[0] = true;
+                }
+            });
+            if (!exist[0]) {
+                if (RequiredLevel.MANDATORY == v.getRequiredLevel()) {
+                    throw new AssertionError(
+                            format("Missing tag type \"{0}\" for Scenario \"{1}\"", v.getName(), scenario.getName()));
+                } else if (RequiredLevel.WARNING == v.getRequiredLevel()) {
+                    // TODO : using SLF4j to print log here
+                }
+            }
+        });
+
+        // validate whether tags are legal
         scenario.getSourceTagNames().forEach(t -> {
             boolean[] validated = new boolean[1];
             validations.forEach(v -> {
@@ -36,9 +58,9 @@ public class DefaultTagValidator implements TagValidator {
                     validated[0] = true;
                 }
             });
-
             if (!validated[0]) {
-                throw new AssertionError(format("Invalid tag \"{0}\" detected.", t));
+                throw new AssertionError(
+                        format("Invalid tag \"{0}\" detected for Scenario \"{1}\"", t, scenario.getName()));
             }
         });
     }
@@ -60,6 +82,7 @@ public class DefaultTagValidator implements TagValidator {
         List<TagValidation> result = Lists.newArrayList();
         result.add(environmentValidation());
         result.add(versionValidation());
+        result.add(jiraValidation());
         return result;
     }
 
@@ -67,14 +90,23 @@ public class DefaultTagValidator implements TagValidator {
      * must have applicable environment(s)
      */
     protected TagValidation environmentValidation() {
-        return new RegexTagValidation("environment", "ALL|LOCAL|SIT|DEV|INT|UAT|PROD", RequiredLevel.MANDATORY);
+        return new RegexTagValidation("environment", "\\@(ALL|LOCAL|SIT|DEV|INT|UAT|PROD)", RequiredLevel.MANDATORY);
     }
 
     /**
      * must have version (since)
      */
     protected TagValidation versionValidation() {
-        return new RegexTagValidation("version", "([A-Za-z0-9]+-)?[0-9]+.[0-9]+(.[0-9]+)?", RequiredLevel.MANDATORY);
+        return new RegexTagValidation("version", "\\@([A-Za-z0-9]+-)?[0-9]+\\.[0-9]+(\\.[0-9]+)?",
+                RequiredLevel.MANDATORY);
+    }
+
+    /**
+     * must have bounded JIRA ticket
+     * @return
+     */
+    protected TagValidation jiraValidation() {
+        return new RegexTagValidation("version", "\\@[A-Za-z]+-[0-9]+", RequiredLevel.OPTIONAL);
     }
 
 }
