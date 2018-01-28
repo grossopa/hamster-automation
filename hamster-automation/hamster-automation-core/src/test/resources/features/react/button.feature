@@ -20,6 +20,6 @@
 Feature: JIRA-1 React Component test
 
   Scenario: Material UI button hover
-    Given A React button with anchor "react_button"
+    Given A React button with anchor "NFlatButton"
     When I move my mouse to hover it
     Then the button css will change to ""

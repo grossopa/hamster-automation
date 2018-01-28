@@ -1,11 +1,12 @@
 package org.hamster.automation.react;
 
+import org.hamster.automation.driver.DefaultDriverProvider;
+import org.hamster.automation.driver.DriverType;
 import org.hamster.automation.react.base.ReactElement;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -29,9 +30,9 @@ public class ButtonSteps {
 
     @Before
     public void before() {
-        System.setProperty("webdriver.chrome.driver", "D:\\automation\\chromedriver.exe");
+        // System.setProperty("webdriver.chrome.driver", "D:\\automation\\chromedriver.exe");
 
-        driver = new ChromeDriver();
+        driver = new DefaultDriverProvider("D:\\java\\hamster-automation\\chromedriver.exe").build(DriverType.CHROME);
         driver.navigate().to("http://localhost:3000");
     }
 

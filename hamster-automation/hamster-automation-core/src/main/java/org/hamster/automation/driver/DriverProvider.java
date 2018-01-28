@@ -3,12 +3,13 @@
  */
 package org.hamster.automation.driver;
 
+import org.hamster.automation.driver.DriverType.DriverAction;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.service.DriverService;
 import org.openqa.selenium.remote.service.DriverService.Builder;
 
 /**
- * Registers driver with executable drivers and provides a getter function to get the {@link RemoteWebDriver} instance.
+ * Registers driver with executable drivers.
  *
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
@@ -16,11 +17,33 @@ import org.openqa.selenium.remote.service.DriverService.Builder;
 public interface DriverProvider {
 
     /**
-     * registers web driver
+     * Builds the {@link RemoteWebDriver} with default settings.
      * 
-     * @param webDriver
+     * @param driverType
+     * @return
      */
-    <DS extends DriverService, B extends Builder<?, ?>> void register(DriverService.Builder<DS, B> builder);
+    RemoteWebDriver build(DriverType driverType);
 
-    RemoteWebDriver getWebDriver();
+    /**
+     * Builds the {@link RemoteWebDriver} by driver type and customized configured builders.
+     * 
+     * @param driverType
+     *            the desired driver type
+     * @param enrichBuilderAction
+     *            to enrich the builder
+     * @return the built DriverService
+     */
+    RemoteWebDriver build(DriverType driverType, DriverAction<Builder<?, ?>, Void> enrichBuilderAction);
+
+    /**
+     * Builds the {@link RemoteWebDriver} by driver type and customized configured builders and options.
+     * 
+     * @param driverType
+     * @param enrichBuilderAction
+     * @param getOptionsAction
+     * @return
+     */
+    RemoteWebDriver build(DriverType driverType, DriverAction<Builder<?, ?>, Void> enrichBuilderAction,
+            DriverAction<Void, Capabilities> getOptionsAction);
+
 }
