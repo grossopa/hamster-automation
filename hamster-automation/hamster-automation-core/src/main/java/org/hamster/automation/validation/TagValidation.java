@@ -42,5 +42,5 @@ public interface TagValidation {
      * 
      * @return required level of the validation
      */
-    RequiredLevel getRequiredLevel();
+    TagValidationRequiredLevel getRequiredLevel();
 }

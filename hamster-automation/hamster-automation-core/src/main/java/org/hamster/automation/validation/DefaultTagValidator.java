@@ -8,7 +8,10 @@ import static java.text.MessageFormat.format;
 import java.util.Collection;
 import java.util.List;
 
-import com.beust.jcommander.internal.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableList;
 
 import cucumber.api.Scenario;
 
@@ -22,6 +25,23 @@ import cucumber.api.Scenario;
  */
 public class DefaultTagValidator implements TagValidator {
 
+    private static final Logger log = LoggerFactory.getLogger(DefaultTagValidator.class);
+
+    /**
+     * Registered tag validations, the validation logic will be performed before each test scenario in order to detect invalid tags.
+     */
+    private final List<TagValidation> validations;
+
+    /**
+     * Constructor
+     * 
+     * @param tagValidation
+     *            validations need to be applied to each scenario
+     */
+    public DefaultTagValidator(List<TagValidation> validations) {
+        this.validations = ImmutableList.copyOf(validations);
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -29,7 +49,6 @@ public class DefaultTagValidator implements TagValidator {
      */
     @Override
     public void validateTags(Scenario scenario) {
-        List<TagValidation> validations = getTagValidations();
         Collection<String> tagNames = scenario.getSourceTagNames();
 
         // validate whether required tags are present
@@ -41,11 +60,10 @@ public class DefaultTagValidator implements TagValidator {
                 }
             });
             if (!exist[0]) {
-                if (RequiredLevel.MANDATORY == v.getRequiredLevel()) {
-                    throw new AssertionError(
-                            format("Missing tag type \"{0}\" for Scenario \"{1}\"", v.getName(), scenario.getName()));
-                } else if (RequiredLevel.WARNING == v.getRequiredLevel()) {
-                    // TODO : using SLF4j to print log here
+                if (TagValidationRequiredLevel.MANDATORY == v.getRequiredLevel()) {
+                    throw new AssertionError(format("Missing mandatory tag type \"{0}\" for Scenario \"{1}\"", v.getName(), scenario.getName()));
+                } else if (TagValidationRequiredLevel.WARNING == v.getRequiredLevel()) {
+                    log.info("Missing necessary tag type \"{}\" for Scenario \"{}\"", v.getName(), scenario.getName());
                 }
             }
         });
@@ -59,54 +77,9 @@ public class DefaultTagValidator implements TagValidator {
                 }
             });
             if (!validated[0]) {
-                throw new AssertionError(
-                        format("Invalid tag \"{0}\" detected for Scenario \"{1}\"", t, scenario.getName()));
+                throw new AssertionError(format("Invalid tag \"{0}\" detected for Scenario \"{1}\"", t, scenario.getName()));
             }
         });
-    }
-
-    /**
-     * Registers tag validations, the validation will be performed before each test scenario in order to detect invalid
-     * tags.
-     */
-    protected List<TagValidation> getTagValidations() {
-        return defaultTagValidations();
-    }
-
-    /**
-     * constructs default tag validations
-     * 
-     * @return default validations as list
-     */
-    protected List<TagValidation> defaultTagValidations() {
-        List<TagValidation> result = Lists.newArrayList();
-        result.add(environmentValidation());
-        result.add(versionValidation());
-        result.add(jiraValidation());
-        return result;
-    }
-
-    /**
-     * must have applicable environment(s)
-     */
-    protected TagValidation environmentValidation() {
-        return new RegexTagValidation("environment", "\\@(ALL|LOCAL|SIT|DEV|INT|UAT|PROD)", RequiredLevel.MANDATORY);
-    }
-
-    /**
-     * must have version (since)
-     */
-    protected TagValidation versionValidation() {
-        return new RegexTagValidation("version", "\\@([A-Za-z0-9]+-)?[0-9]+\\.[0-9]+(\\.[0-9]+)?",
-                RequiredLevel.MANDATORY);
-    }
-
-    /**
-     * must have bounded JIRA ticket
-     * @return
-     */
-    protected TagValidation jiraValidation() {
-        return new RegexTagValidation("version", "\\@[A-Za-z]+-[0-9]+", RequiredLevel.OPTIONAL);
     }
 
 }

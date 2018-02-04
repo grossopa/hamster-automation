@@ -18,9 +18,9 @@ public class RegexTagValidation implements TagValidation {
 
     private final String name;
     private final Pattern regexPattern;
-    private final RequiredLevel requiredLevel;
+    private final TagValidationRequiredLevel requiredLevel;
 
-    public RegexTagValidation(String name, String regex, RequiredLevel requiredLevel) {
+    public RegexTagValidation(String name, String regex, TagValidationRequiredLevel requiredLevel) {
         Preconditions.checkNotNull(name);
         Preconditions.checkNotNull(regex);
         Preconditions.checkNotNull(requiredLevel);
@@ -67,7 +67,7 @@ public class RegexTagValidation implements TagValidation {
      * @return the requiredLevel
      */
     @Override
-    public RequiredLevel getRequiredLevel() {
+    public TagValidationRequiredLevel getRequiredLevel() {
         return requiredLevel;
     }
 
