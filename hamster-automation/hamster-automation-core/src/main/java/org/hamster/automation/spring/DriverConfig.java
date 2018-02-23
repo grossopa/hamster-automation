@@ -24,6 +24,12 @@ public class DriverConfig {
      * Selenium Executable driver path
      */
     protected @Value("${automation.driver.path}") String driverPath;
+
+    /**
+     * the driver type
+     * 
+     * @see DriverType
+     */
     protected @Value("${automation.driver.type}") String driverType;
 
     @Bean

@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 /**
- * Used in a Spring Test environment
+ * Facade of all predefined configuration and expected to be used in a Spring Test environment
  *
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
@@ -15,10 +15,6 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource(value = TestConsts.PROPERTIES_DRIVER, ignoreResourceNotFound = true)
 public class TestConfig {
     
-    static {
-        LogConfig.startDefault();
-    }
-
     @Configuration
     public static class AppDriverConfig extends DriverConfig {
 

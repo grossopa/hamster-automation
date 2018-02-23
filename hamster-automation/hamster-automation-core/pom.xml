@@ -42,6 +42,7 @@
       <artifactId>cucumber-junit</artifactId>
     </dependency>
 
+    <!-- Cucumber Spring integration -->
     <dependency>
       <groupId>info.cukes</groupId>
       <artifactId>cucumber-spring</artifactId>

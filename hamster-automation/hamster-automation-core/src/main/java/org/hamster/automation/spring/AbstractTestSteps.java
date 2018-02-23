@@ -3,13 +3,13 @@
  */
 package org.hamster.automation.spring;
 
+import org.hamster.automation.spring.context.loader.AppAnnotationConfigContextLoader;
 import org.hamster.automation.validation.TagValidator;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import cucumber.api.Scenario;
 
@@ -19,9 +19,9 @@ import cucumber.api.Scenario;
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(loader = AppAnnotationConfigContextLoader.class)
 public abstract class AbstractTestSteps {
-
+    
     /**
      * the root configuration class
      *
@@ -32,7 +32,7 @@ public abstract class AbstractTestSteps {
     public static class AutomationTestConfig extends TestConfig {
 
     }
-    
+
     protected @Value("${automation.app.baseurl}") String baseUrl;
 
     /**

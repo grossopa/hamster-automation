@@ -113,12 +113,15 @@ public class LogConfig {
     }
 
     /**
-     * @return default EncoderProvider with pattern set from property file
+     * @return default EncoderProvider instance with pattern set from property file
      */
     private EncoderProvider encoderProvider() {
         return new DefaultEncoderProvider(encoderPattern);
     }
 
+    /**
+     * @return default ThresholdFilterProvider instance with level specified from property file
+     */
     protected FilterProvider thresholdFilterProvider() {
         return new ThresholdFilterProvider(level);
     }
@@ -147,7 +150,13 @@ public class LogConfig {
      */
     public static final void startDefault() {
         Logger rootLogger = (Logger) LoggerFactory.getLogger("ROOT");
+        rootLogger.getLoggerContext().reset();
+        
+        // filter out unnecessary library logs
+        ((Logger) LoggerFactory.getLogger("org.springframework.test")).setLevel(Level.WARN);
+        
         new LogConfig(Lists.newArrayList(TestConsts.PROPERTIES_CORE, TestConsts.PROPERTIES_ENVIRONMENT)).start(rootLogger);
     }
+    
 
 }

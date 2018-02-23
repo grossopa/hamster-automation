@@ -5,7 +5,6 @@ package org.hamster.automation.react.base;
 
 import java.util.List;
 
-import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
@@ -14,15 +13,12 @@ import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import cucumber.api.junit.Cucumber;
-
 /**
  *
  *
  * @author <a href="mailto:grossopaforever@gmail.com">Jack Yin</a>
  * @since 1.0
  */
-@RunWith(Cucumber.class)
 public abstract class ReactElement implements WebElement {
     
     private final WebElement element;

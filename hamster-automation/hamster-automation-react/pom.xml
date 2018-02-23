@@ -11,6 +11,8 @@
   
   <properties>
     <node.home>src/main/js</node.home>
+    
+    <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
   </properties>
 
   <build>
@@ -27,6 +29,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
+        <version>${exec-maven-plugin.version}</version>
         <executions>
           <execution>
             <phase>install</phase>
@@ -37,10 +40,10 @@
         </executions>
         <configuration>
           <executable>npm</executable>
-          <workingDirectory>${node.home}</workingDirectory>
+          <workingDirectory>${node.home}/hamster-react</workingDirectory>
           <arguments>
             <argument>run</argument>
-            <argument>install</argument>
+            <argument>build</argument>
           </arguments>
         </configuration>
       </plugin>
